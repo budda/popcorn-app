@@ -172,6 +172,10 @@ jQuery(function ($) {
         var currentVolume = videoPlayer.volume();
         videoPlayer.volume(currentVolume - 0.1);
       }
+      if (event.keyCode == 13) {
+        // Enter: toggle fullscreen
+        $('.vjs-fullscreen-control').trigger('click');
+      } 
     }
   });
 
