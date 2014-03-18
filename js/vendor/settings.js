@@ -13,7 +13,7 @@ Settings = {
         // Used to check if there's an internet connection
         "connectionCheckUrl": "http://www.google.com",
         // YIFY Endpoint
-        "yifyApiEndpoint": "http://yify-torrents.com/api/",
+        "yifyApiEndpoint": "http://yts.im/api/",
         // A mirror for YIFY (for users in the UK -Yify is blocked there-)
         "yifyApiEndpointMirror": "http://yify.unlocktorrent.com/api/"
     },
