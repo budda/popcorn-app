@@ -23,6 +23,7 @@
 	"legalDisclaimerCancel": "Leave",
 	"genres": {
 		"all": "Popular",
+		"date": "Latest",
 		"action": "Action",
 		"adventure": "Adventure",
 		"animation": "Animation",
