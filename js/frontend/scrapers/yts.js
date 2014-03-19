@@ -52,7 +52,7 @@ var Yts = Backbone.Collection.extend({
                     // Temporary object
                     var movieModel = {
                         imdb:       movie.ImdbCode.replace('tt', ''),
-                        title:      movie.MovieTitleClean,
+                        title:      movie.MovieTitleClean.replace(/UNRATED|DIRECTORS\ CUT/i, ''),
                         year:       movie.MovieYear,
                         runtime:    +traktInfo.runtime || 0,
                         synopsis:   traktInfo.overview || "",
