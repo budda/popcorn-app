@@ -1,6 +1,11 @@
+
+
 var trakt = require('./js/frontend/providers/trakttv');
 
 var url = 'http://yts.re/api/list.json?sort=seeds&limit=50';
+
+// Hack to keep to cancel the request in case of new request
+var currentRequest = null;
 
 var Yts = Backbone.Collection.extend({
     apiUrl: url,
@@ -25,7 +30,12 @@ var Yts = Backbone.Collection.extend({
 
     fetch: function() {
         var collection = this;
-        request(this.apiUrl, {json: true}, function(err, res, ytsData) {
+
+        if(currentRequest) {
+            currentRequest.abort();
+        }
+
+        currentRequest = request(this.apiUrl, {json: true}, function(err, res, ytsData) {
             var movies = [],
             memory = {};
 
@@ -43,16 +53,26 @@ var Yts = Backbone.Collection.extend({
                     if( typeof movie.ImdbCode != 'string' || movie.ImdbCode.replace('tt', '') == '' ){ return; }
 
                     var traktInfo = _.find(trakData, function(trakMovie) { return trakMovie.imdb_id == movie.ImdbCode });
-                    if(traktInfo)
+                    if(traktInfo) {
                         traktInfo.images.posterSmall = trakt.resizeImage(traktInfo.images.poster, '138');
+                    } else {
+                        traktInfo = {images:{}};
+                    }
 
                     var torrents = {};
                     torrents[movie.Quality] = movie.TorrentUrl;
 
+                    // Check for any edition and extract from the title
+                    var editionLabelPos = movie.MovieTitleClean.search(/[\s-]*(extended|unrated|director'?s cut)$/i);
+                    if (editionLabelPos > -1) {
+                      var MovieTitleEdition = movie.MovieTitleClean.substring(editionLabelPos);
+                    }
+
                     // Temporary object
                     var movieModel = {
                         imdb:       movie.ImdbCode.replace('tt', ''),
-                        title:      movie.MovieTitleClean,
+                        title:      movie.MovieTitleClean.replace(/[\s-]*(extended|unrated|director'?s cut)$/i, ''),
+                        edition:    MovieTitleEdition,
                         year:       movie.MovieYear,
                         runtime:    +traktInfo.runtime || 0,
                         synopsis:   traktInfo.overview || "",
