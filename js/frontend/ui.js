@@ -145,37 +145,48 @@ jQuery(function ($) {
     var videoPlayer = $("#video_player");
     if (videoPlayer.length > 0) {
       videoPlayer = videoPlayer[0].player;
-      if (event.keyCode == 32 && $("#video_player").is(".vjs-playing")) {
-        // Space: pause
-        videoPlayer.pause();
-      } else if (event.keyCode == 32 && $("#video_player").is(".vjs-paused")) {
-        // Space: play
-        videoPlayer.play();
+      
+      switch(event.keyCode) {
+        case 32:
+          if ($("#video_player").is(".vjs-playing")) {
+            // Space: pause
+            videoPlayer.pause();
+          } else if($("#video_player").is(".vjs-paused")) {
+            // Space: play
+            videoPlayer.play();
+          }
+          break;
+      
+        case 37:
+          // Left arrow: jump backward
+          var currentTime = videoPlayer.currentTime();
+          videoPlayer.currentTime(currentTime - 10);        
+          break;
+
+        case 38:
+          // Up arrow: increase volume (1.0 is all the way up)
+          var currentVolume = videoPlayer.volume();
+          videoPlayer.volume(currentVolume + 0.1);
+          break;
+
+        case 39:
+          // Right arrow: jump forward
+          var currentTime = videoPlayer.currentTime();
+          videoPlayer.currentTime(currentTime + 10);
+          break;      
+        
+        case 40:
+          // Down arrow: decrease volume (0 is off, muted)
+          var currentVolume = videoPlayer.volume();
+          videoPlayer.volume(currentVolume - 0.1);
+          break;
+
+        case 13:
+        case 70:
+          // Enter or F: toggle fullscreen
+          $('.vjs-fullscreen-control').trigger('click');
+          break;
       }
-      if (event.keyCode == 37) {
-        // Left arrow: jump backward
-        var currentTime = videoPlayer.currentTime();
-        videoPlayer.currentTime(currentTime - 10);
-      }
-      if (event.keyCode == 38) {
-        // Up arrow: increase volume (1.0 is all the way up)
-        var currentVolume = videoPlayer.volume();
-        videoPlayer.volume(currentVolume + 0.1);
-      }
-      if (event.keyCode == 39) {
-        // Right arrow: jump forward
-        var currentTime = videoPlayer.currentTime();
-        videoPlayer.currentTime(currentTime + 10);
-      }
-      if (event.keyCode == 40) {
-        // Down arrow: decrease volume (0 is off, muted)
-        var currentVolume = videoPlayer.volume();
-        videoPlayer.volume(currentVolume - 0.1);
-      }
-      if (event.keyCode == 13) {
-        // Enter: toggle fullscreen
-        $('.vjs-fullscreen-control').trigger('click');
-      } 
     }
   });
 
