@@ -49,10 +49,17 @@ var Yts = Backbone.Collection.extend({
                     var torrents = {};
                     torrents[movie.Quality] = movie.TorrentUrl;
 
+                    // Check for any edition and extract from the title
+                    var editionLabelPos = movie.MovieTitleClean.search(/[\s-]*(extended|unrated|director'?s cut)$/i);
+                    if (editionLabelPos > -1) {
+                      var MovieTitleEdition = movie.MovieTitleClean.substring(editionLabelPos);
+                    }
+
                     // Temporary object
                     var movieModel = {
                         imdb:       movie.ImdbCode.replace('tt', ''),
-                        title:      movie.MovieTitleClean.replace(/UNRATED|DIRECTORS\ CUT/i, ''),
+                        title:      movie.MovieTitleClean.replace(/[\s-]*(extended|unrated|director'?s cut)$/i, ''),
+                        edition:    MovieTitleEdition,
                         year:       movie.MovieYear,
                         runtime:    +traktInfo.runtime || 0,
                         synopsis:   traktInfo.overview || "",
