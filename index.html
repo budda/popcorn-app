@@ -84,9 +84,11 @@
                 <li>
                   <%= year %>
                 </li>
+                <% if (this.model.get('edition')) { %>
                 <li>
                   <%= edition %>
                 </li>
+                <% } %>
                 <li>
                   <% if (this.model.get('runtime')) { %>
                     <span class="duration"><%= runtime %> <%= i18n.__('durationUnit') %></span>
